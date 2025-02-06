@@ -3,8 +3,8 @@
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&display=swap');
 
-h1, p, a, button,h2{
-  font-family: 'Bodoni Moda', serif;
+h1, p, a, button,h2, motion.div{
+  font-family: 'Bodoni Moda';
 }
 
 .starry-background {

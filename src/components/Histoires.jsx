@@ -1,64 +1,119 @@
-import React, { useRef } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-
-import { Autoplay, Pagination } from 'swiper/modules';
-
+import React, { useState, useEffect, useRef } from 'react';
 import bg from '../assets/michel.png';
 import bg2 from '../assets/blue6.png';
 import bg3 from '../assets/michel.png';
+import bghis from '../assets/bghis.png';
 
 const slides = [
-  { image: bg, text: "L'histoire de Michel" },
-  { image: bg2, text: "L'histoire d'Odile" },
+  { image: bg, text: "MICHEL & ODILE" },
+  { image: bg2, text: "Christian & marie-paul" },
   { image: bg3, text: "L'histoire d'Hugette" }
 ];
 
 export default function MO() {
-  const progressCircle = useRef(null);
-  const progressContent = useRef(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [blur, setBlur] = useState(false); // Controls the blur animation
+  const intervalRef = useRef(null);
 
-  const onAutoplayTimeLeft = (s, time, progress) => {
-    progressCircle.current.style.setProperty('--progress', 1 - progress);
-    progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
+  const startAutoplay = () => {
+    intervalRef.current = setInterval(() => {
+      setBlur(true); // Start blur effect
+      setTimeout(() => {
+        setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+        setBlur(false); // Remove blur effect after slide change
+      }, 500); // Wait for the blur effect to complete before changing the slide
+    }, 10000); // Change slide every 10 seconds
+  };
+
+  useEffect(() => {
+    startAutoplay();
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
+  const goToSlide = (index) => {
+    setBlur(true); // Start blur effect
+    setTimeout(() => {
+      setCurrentSlide(index);
+      setBlur(false); // Remove blur effect after slide change
+    }, 500); // Wait for the blur effect to complete before changing the slide
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    startAutoplay();
   };
 
   return (
-    <section className="h-screen flex items-center justify-center relative">
-      <h1 className="absolute top-4 left-4 text-3xl font-bold text-white z-10">
+    <section
+      className="h-[45rem] flex items-center justify-center relative"
+      style={{
+        backgroundImage: `url(${bghis})`, // Set bghis as the background
+        backgroundSize: 'cover', // Ensure the image covers the entire section
+        backgroundPosition: 'center', // Center the background image
+        backgroundRepeat: 'no-repeat', // Prevent the image from repeating
+      }}
+    >
+      {/* Slider Container (smaller size) */}
+      <div className="w-3/4 h-3/4 relative"> {/* Adjust the size of the slider */}
+        <div
+          className={`w-full h-full bg-cover bg-center flex flex-col items-center justify-center transition-all duration-500 ${
+            blur ? 'blur-md' : 'blur-0'
+          }`}
+          style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
+        >
+          {/* Content moved to the bottom */}
+        </div>
+      </div>
+
+      {/* "Découvrez leurs histoires" text in the top-left corner */}
+      <h1
+        className="absolute top-4 left-4 text-3xl font-bold text-white z-10"
+        style={{
+          fontStyle: 'normal',
+          fontWeight: 400,
+          lineHeight: 'normal',
+          textTransform: 'uppercase'
+        }}
+      >
         Découvrez leurs histoires
       </h1>
-      <Swiper
-        centeredSlides={true}
-        autoplay={{
-          delay: 10000,
-          disableOnInteraction: false,
-        }}
-        pagination={{ clickable: true }}
-        modules={[Autoplay, Pagination]}
-        onAutoplayTimeLeft={onAutoplayTimeLeft}
-        className="mySwiper w-full h-full absolute top-0 left-0"
-      >
-        {slides.map((slide, index) => (
-          <SwiperSlide key={index}>
-            <div
-              className="w-full h-full bg-cover bg-center flex items-center justify-center"
-              style={{ backgroundImage: `url(${slide.image})` }}
-            >
-              <h1 className="text-5xl font-bold text-white text-center p-4 rounded-lg">
-                {slide.text}
-              </h1>
-            </div>
-          </SwiperSlide>
+
+      {/* h1 and button moved to the bottom */}
+      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-center z-10">
+        <h1
+          className="text-5xl text-white p-4 rounded-lg"
+          style={{
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: 'normal',
+            textTransform: 'uppercase'
+          }}
+        >
+          {slides[currentSlide].text}
+        </h1>
+        <a
+          href="#"
+          className="mt-2 px-4 py-1 text-sm text-white uppercase border-2 rounded-full hover:bg-white hover:text-black transition-colors duration-300"
+        >
+          En savoir plus
+        </a>
+      </div>
+
+      {/* Slide indicators */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+              currentSlide === index ? 'bg-white' : 'bg-gray-500'
+            }`}
+          />
         ))}
-        <div className="autoplay-progress" slot="container-end">
-          <svg viewBox="0 0 48 48" ref={progressCircle}>
-            <circle cx="24" cy="24" r="20"></circle>
-          </svg>
-          <span ref={progressContent}></span>
-        </div>
-      </Swiper>
+      </div>
     </section>
   );
 }

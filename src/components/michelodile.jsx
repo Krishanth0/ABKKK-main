@@ -1,5 +1,6 @@
 import React from 'react';
 import bg from '../assets/wedding.jpeg';
+import { Fade } from "react-awesome-reveal";
 
 const Michelodile = () => {
   return (
@@ -9,9 +10,9 @@ const Michelodile = () => {
     >
       <div className="">
         <h1 className="text-5xl font-bold text-white">MICHEL & ODILE</h1>
-        <p className="text-xl text-white mt-4">
+        <Fade delay={1e3} cascade damping={1e-1} className="text-xl text-white mt-4">
           This is some text under the title. It can be a description or anything you want.
-        </p>
+        </Fade>
       </div>
 
       <button className="absolute bottom-8 right-8 px-6 py-2 text-white text-lg bg-transparent border-none cursor-pointer group">
