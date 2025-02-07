@@ -48,71 +48,68 @@ export default function MO() {
 
   return (
     <section
-      className="h-[45rem] flex items-center justify-center relative"
+      className="h-[57rem] flex items-center justify-center relative"
       style={{
-        backgroundImage: `url(${bghis})`, // Set bghis as the background
         backgroundSize: 'cover', // Ensure the image covers the entire section
         backgroundPosition: 'center', // Center the background image
         backgroundRepeat: 'no-repeat', // Prevent the image from repeating
       }}
     >
       {/* Slider Container (smaller size) */}
-      <div className="w-3/4 h-3/4 relative"> {/* Adjust the size of the slider */}
+      <div className="w-[80%] h-3/4 relative"> {/* Adjust the size of the slider */}
         <div
           className={`w-full h-full bg-cover bg-center flex flex-col items-center justify-center transition-all duration-500 ${
             blur ? 'blur-md' : 'blur-0'
           }`}
           style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
         >
-          {/* Content moved to the bottom */}
+          {/* "Découvrez leurs histoires" text in the top-left corner */}
+          <h1
+            className="absolute top-4 left-4 text-3xl font-bold text-white z-10"
+            style={{
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: 'normal',
+              textTransform: 'uppercase'
+            }}
+          >
+            Découvrez leurs histoires
+          </h1>
+
+          {/* h1 and button moved to the bottom */}
+          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-center z-10">
+            <h1
+              className="text-3xl text-white p-4 rounded-lg"
+              style={{
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: 'normal',
+                textTransform: 'uppercase'
+              }}
+            >
+              {slides[currentSlide].text}
+            </h1>
+            <a
+              href="#"
+              className="mt-2 px-4 py-1 text-sm text-white uppercase border-2 rounded-full hover:bg-white hover:text-black transition-colors duration-300"
+            >
+              En savoir plus
+            </a>
+          </div>
+
+          {/* Slide indicators */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                  currentSlide === index ? 'bg-white' : 'bg-gray-500'
+                }`}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-
-      {/* "Découvrez leurs histoires" text in the top-left corner */}
-      <h1
-        className="absolute top-4 left-4 text-3xl font-bold text-white z-10"
-        style={{
-          fontStyle: 'normal',
-          fontWeight: 400,
-          lineHeight: 'normal',
-          textTransform: 'uppercase'
-        }}
-      >
-        Découvrez leurs histoires
-      </h1>
-
-      {/* h1 and button moved to the bottom */}
-      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-center z-10">
-        <h1
-          className="text-5xl text-white p-4 rounded-lg"
-          style={{
-            fontStyle: 'normal',
-            fontWeight: 400,
-            lineHeight: 'normal',
-            textTransform: 'uppercase'
-          }}
-        >
-          {slides[currentSlide].text}
-        </h1>
-        <a
-          href="#"
-          className="mt-2 px-4 py-1 text-sm text-white uppercase border-2 rounded-full hover:bg-white hover:text-black transition-colors duration-300"
-        >
-          En savoir plus
-        </a>
-      </div>
-
-      {/* Slide indicators */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-              currentSlide === index ? 'bg-white' : 'bg-gray-500'
-            }`}
-          />
-        ))}
       </div>
     </section>
   );

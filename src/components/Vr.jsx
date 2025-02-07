@@ -1,5 +1,5 @@
 import React from 'react';
-import bg from '../assets/watercolor-portep.png';
+import bg from '../assets/DOOR.png';
 
 function Vr() {
   return (
@@ -7,7 +7,7 @@ function Vr() {
       className="h-screen flex flex-col items-center justify-center relative bg-cover" 
       style={{ backgroundImage: `url(${bg})` }}
     >
-      <div className="text-center text-white">
+      <div className="text-center text-BLACK">
         <h2 className="text-xl md:text-2xl font-light uppercase" style={{ fontStyle: 'normal', fontWeight: 400, lineHeight: 'normal' }}>
           VIVEZ Experience
         </h2>
@@ -20,7 +20,7 @@ function Vr() {
       </div>
       <a 
   href="https://store.steampowered.com/" 
-  className="animated-link absolute bottom-10 text-white text-[16px] uppercase no-underline hover:no-underline group"
+  className="animated-link absolute bottom-10 text-black text-[16px] uppercase no-underline hover:no-underline group"
 >
   En savoir plus
   <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-300 ease-in-out group-hover:w-full"></span>

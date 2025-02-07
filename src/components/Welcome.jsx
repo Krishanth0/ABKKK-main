@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion'; // Import Framer Motion
 import { ReactComponent as Signature } from '../assets/Signature.svg';
-import bg from '../assets/image-noir-blanc.png'; // Import the image
+import inktop from '../assets/tlint.png';
+import inkbot from '../assets/blink.png';
 
 const Welcome = () => {
   const [fadeText, setFadeText] = useState(false);
@@ -14,9 +16,28 @@ const Welcome = () => {
 
   return (
     <section 
-      className="bg-black h-screen flex items-center justify-center relative bg-cover bg-center"
-      style={{ backgroundImage: `url(${bg})` }}
+      className="bg-white h-screen flex items-center justify-center relative bg-cover bg-center"
     >
+      {/* Top Ink Image */}
+      <motion.img
+        src={inktop}
+        alt="Top Ink"
+        className="absolute top-0 left-0 w-full"
+        initial={{ opacity: 0, scale: 0.8 }} // Start with low opacity and slightly smaller scale
+        animate={{ opacity: 1, scale: 1 }} // Fade in and scale to normal size
+        transition={{ duration: 2, ease: 'easeOut', delay: 0.5 }} // Smooth transition with delay
+      />
+
+      {/* Bottom Ink Image */}
+      <motion.img
+        src={inkbot}
+        alt="Bottom Ink"
+        className="absolute bottom-0 left-0 w-full"
+        initial={{ opacity: 0, scale: 0.8 }} // Start with low opacity and slightly smaller scale
+        animate={{ opacity: 1, scale: 1 }} // Fade in and scale to normal size
+        transition={{ duration: 2, ease: 'easeOut', delay: 1 }} // Smooth transition with delay
+      />
+
       <div className="welcome-container text-center">
         <div className="svg-wrapper">
           <Signature className="w-[50rem] h-[50rem] mx-auto" />

@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import bg from '../assets/image-blanc-noir.png'; // Import the image
 
 const Anneback = () => {
   const text =
@@ -14,17 +13,16 @@ const Anneback = () => {
     <section
       className="h-[45rem] flex items-center justify-center p-8 overflow-hidden relative object-scale-down"
       style={{
-        backgroundImage: `url(${bg})`, // Set the imported image as the background
         backgroundSize: 'cover', // Ensure the image covers the entire section
         backgroundPosition: 'center', // Center the background image
         backgroundRepeat: 'no-repeat', // Prevent the image from repeating
       }}
     >
-      <div className="w-full max-w-2xl relative z-10">
+      <div className="w-full max-w-4xl relative z-10">
         {/* Letter-style container */}
         <motion.div
           style={{ fontFamily: "'Bodoni Moda', serif" }} // Apply the font family
-          className="text-[18px] leading-relaxed text-black"
+          className="text-[24px] leading-relaxed text-black"
         >
           {/* Main text */}
           <motion.div className="text-justify text-black">
