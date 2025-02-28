@@ -5,7 +5,9 @@ import Anneback from './components/Anneback';
 import Histoires from './components/Histoires';
 import Vr from './components/Vr';
 import Footer from './components/footer';
-import Michel from './components/michelodile';
+import Doc from './components/doc';
+import Carte from './components/carte';
+
 function App() {
   return (
     <BrowserRouter>
@@ -13,9 +15,10 @@ function App() {
         <Welcome />
         <Anneback />
         <Histoires />
+        <Doc />
+        <Carte />
         <Vr />
         <Footer/>
-        <Michel />
 
       </>
     </BrowserRouter>
