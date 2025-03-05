@@ -2,115 +2,172 @@ import React, { useState, useEffect, useRef } from 'react';
 import bg from '../assets/michel.png';
 import bg2 from '../assets/blue6.png';
 import bg3 from '../assets/michel.png';
-import bghis from '../assets/bghis.png';
 
 const slides = [
-  { image: bg, text: "MICHEL & ODILE" },
-  { image: bg2, text: "Christian & marie-paul" },
-  { image: bg3, text: "L'histoire d'Hugette" }
+  { image: bg, text: "MICHEL & ODILE", details: { title: "Michel & Odile", description: "This is the story of Michel and Odile." } },
+  { image: bg2, text: "Christian & marie-paul", details: { title: "Christian & Marie-Paul", description: "This is the story of Christian and Marie-Paul." } },
+  { image: bg3, text: "L'histoire d'Hugette", details: { title: "L'histoire d'Hugette", description: "This is the story of Hugette." } }
 ];
 
 export default function MO() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [blur, setBlur] = useState(false); // Controls the blur animation
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [detailedView, setDetailedView] = useState(false);
   const intervalRef = useRef(null);
 
   const startAutoplay = () => {
     intervalRef.current = setInterval(() => {
-      setBlur(true); // Start blur effect
+      setIsTransitioning(true);
       setTimeout(() => {
         setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-        setBlur(false); // Remove blur effect after slide change
-      }, 500); // Wait for the blur effect to complete before changing the slide
-    }, 10000); // Change slide every 10 seconds
+        setIsTransitioning(false);
+      }, 600); // Matches transition duration
+    }, 5000); // Change slide every 5 seconds
   };
 
   useEffect(() => {
     startAutoplay();
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, []);
 
   const goToSlide = (index) => {
-    setBlur(true); // Start blur effect
+    setIsTransitioning(true);
     setTimeout(() => {
       setCurrentSlide(index);
-      setBlur(false); // Remove blur effect after slide change
-    }, 500); // Wait for the blur effect to complete before changing the slide
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
+      setIsTransitioning(false);
+    }, 600);
+    if (intervalRef.current) clearInterval(intervalRef.current);
     startAutoplay();
   };
 
+  const nextSlide = () => goToSlide((currentSlide + 1) % slides.length);
+  const prevSlide = () => goToSlide((currentSlide - 1 + slides.length) % slides.length);
+
+  const handleEnSavoirPlusClick = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setDetailedView(true);
+      setIsTransitioning(false);
+    }, 600);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+  };
+
+  const handleBackClick = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setDetailedView(false);
+      setIsTransitioning(false);
+      startAutoplay();
+    }, 600);
+  };
+
   return (
-    <section
-      className="h-[57rem] flex items-center justify-center relative"
-      style={{
-        backgroundSize: 'cover', // Ensure the image covers the entire section
-        backgroundPosition: 'center', // Center the background image
-        backgroundRepeat: 'no-repeat', // Prevent the image from repeating
-      }}
-    >
-      {/* Slider Container (smaller size) */}
-      <div className="w-[80%] h-3/4 relative"> {/* Adjust the size of the slider */}
+    <section className="h-screen flex items-center justify-center relative overflow-hidden bg-black">
+      {/* Slider Container */}
+      <div className="w-4/5 h-4/5 relative">
         <div
-          className={`w-full h-full bg-cover bg-center flex flex-col items-center justify-center transition-all duration-500 ${
-            blur ? 'blur-md' : 'blur-0'
+          className={`w-full h-full bg-cover bg-center flex flex-col items-center justify-center transition-all duration-600 ease-in-out ${
+            isTransitioning ? 'opacity-50 scale-95 blur-sm' : 'opacity-100 scale-100 blur-0'
           }`}
           style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
         >
-          {/* "Découvrez leurs histoires" text in the top-left corner */}
+          {/* Top-left text */}
           <h1
-            className="absolute top-4 left-4 text-3xl font-bold text-white z-10"
-            style={{
-              fontStyle: 'normal',
-              fontWeight: 400,
-              lineHeight: 'normal',
-              textTransform: 'uppercase'
-            }}
+            className="absolute top-6 left-6 text-3xl font-bold text-white z-10 uppercase"
+            style={{ fontWeight: 400 }}
           >
             Découvrez leurs histoires
           </h1>
 
-          {/* h1 and button moved to the bottom */}
-          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-center z-10">
-            <h1
-              className="text-3xl text-white p-4 rounded-lg"
-              style={{
-                fontStyle: 'normal',
-                fontWeight: 400,
-                lineHeight: 'normal',
-                textTransform: 'uppercase'
-              }}
-            >
-              {slides[currentSlide].text}
-            </h1>
-            <a
-              href="#"
-              className="mt-2 px-4 py-1 text-sm text-white uppercase border-2 rounded-full hover:bg-white hover:text-black transition-colors duration-300"
-            >
-              En savoir plus
-            </a>
-          </div>
+          {/* Bottom content */}
+          {!detailedView && (
+            <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-center z-10">
+              <h1
+                className="text-4xl text-white bg-black/50 p-4 rounded-lg uppercase"
+                style={{ fontWeight: 400 }}
+              >
+                {slides[currentSlide].text}
+              </h1>
+              <button
+                onClick={handleEnSavoirPlusClick}
+                className="mt-4 px-6 py-2 text-white uppercase border-2 border-white rounded-full hover:bg-white hover:text-black transition-all duration-300"
+              >
+                En savoir plus
+              </button>
+            </div>
+          )}
 
           {/* Slide indicators */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-            {slides.map((_, index) => (
+          {!detailedView && (
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    currentSlide === index ? 'bg-white scale-125' : 'bg-gray-500'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Navigation Arrows */}
+          {!detailedView && (
+            <>
               <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                  currentSlide === index ? 'bg-white' : 'bg-gray-500'
-                }`}
-              />
-            ))}
-          </div>
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-5xl z-10 hover:text-gray-300 transition-colors"
+                onClick={prevSlide}
+              >
+                &#8249;
+              </button>
+              <button
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-5xl z-10 hover:text-gray-300 transition-colors"
+                onClick={nextSlide}
+              >
+                &#8250;
+              </button>
+            </>
+          )}
+
+          {/* Detailed View */}
+          {detailedView && (
+            <div 
+              className="absolute inset-0 w-full h-full bg-cover bg-center flex z-20 transition-all duration-600"
+              style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
+            >
+              <div className="w-1/2 h-full flex flex-col justify-center p-12 bg-black/70">
+                <h1
+                  className="text-5xl font-bold text-white mb-6 uppercase"
+                  style={{ fontWeight: 400 }}
+                >
+                  {slides[currentSlide].details.title}
+                </h1>
+                <p className="text-xl text-white mb-8">
+                  {slides[currentSlide].details.description}
+                </p>
+                <button
+                  onClick={handleBackClick}
+                  className="text-white text-lg uppercase border-b-2 border-white hover:border-opacity-0 transition-all duration-300 w-fit"
+                >
+                  Back
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* CSS */}
+      <style jsx>{`
+        section {
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+      `}</style>
     </section>
   );
 }

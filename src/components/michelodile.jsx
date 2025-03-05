@@ -1,56 +1,158 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import bg from '../assets/michel.png';
-import { Fade } from "react-awesome-reveal";
+import bg2 from '../assets/blue6.png';
+import bg3 from '../assets/michel.png';
+import bghis from '../assets/bghis.png';
 
-const Michelodile = () => {
-  const [isBlurred, setIsBlurred] = useState(true); // State to control blur
+const slides = [
+  { image: bg, text: "MICHEL & ODILE", description: "Description for MICHEL & ODILE" },
+  { image: bg2, text: "Christian & marie-paul", description: "Description for Christian & marie-paul" },
+  { image: bg3, text: "L'histoire d'Hugette", description: "Description for L'histoire d'Hugette" }
+];
 
-  const handleUnblur = () => {
-    setIsBlurred(false); // Unblur the background
+export default function MO() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [blur, setBlur] = useState(false); // Controls the blur animation
+  const [showDescription, setShowDescription] = useState(false); // Controls the description visibility
+  const intervalRef = useRef(null);
+
+  const startAutoplay = () => {
+    intervalRef.current = setInterval(() => {
+      setBlur(true); // Start blur effect
+      setTimeout(() => {
+        setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+        setBlur(false); // Remove blur effect after slide change
+      }, 500); // Wait for the blur effect to complete before changing the slide
+    }, 10000); // Change slide every 10 seconds
+  };
+
+  useEffect(() => {
+    startAutoplay();
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
+  const goToSlide = (index) => {
+    setBlur(true); // Start blur effect
+    setTimeout(() => {
+      setCurrentSlide(index);
+      setBlur(false); // Remove blur effect after slide change
+    }, 500); // Wait for the blur effect to complete before changing the slide
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    startAutoplay();
+  };
+
+  const handleEnSavoirPlusClick = () => {
+    setBlur(true);
+    setShowDescription(true);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  };
+
+  const handleBackClick = () => {
+    setBlur(false);
+    setShowDescription(false);
+    startAutoplay();
   };
 
   return (
-    <div
-      className="h-screen bg-cover bg-center flex flex-col justify-center items-start pl-12 relative"
-      style={{ backgroundImage: `url(${bg})` }}
+    <section
+      className="h-[57rem] flex items-center justify-center relative"
+      style={{
+        backgroundSize: 'cover', // Ensure the image covers the entire section
+        backgroundPosition: 'center', // Center the background image
+        backgroundRepeat: 'no-repeat', // Prevent the image from repeating
+      }}
     >
-      {/* Blur overlay */}
-      <div
-        className={`absolute inset-0 bg-black bg-opacity-50 backdrop-blur-md transition-all duration-500 ${
-          isBlurred ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-      ></div>
+      {/* Slider Container (smaller size) */}
+      <div className="w-[80%] h-3/4 relative"> {/* Adjust the size of the slider */}
+        <div
+          className={`w-full h-full bg-cover bg-center flex flex-col items-center justify-center transition-all duration-500 ${
+            blur ? 'blur-md' : 'blur-0'
+          }`}
+          style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
+        >
+          {/* "Découvrez leurs histoires" text in the top-left corner */}
+          <h1
+            className="absolute top-4 left-4 text-3xl font-bold text-white z-10"
+            style={{
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: 'normal',
+              textTransform: 'uppercase'
+            }}
+          >
+            Découvrez leurs histoires
+          </h1>
 
-      {/* Content */}
-      <div className={`relative z-10 ${isBlurred ? '' : 'hidden'}`}>
-        <h1 className="text-5xl font-bold text-white">MICHEL & ODILE</h1>
-        <Fade delay={1e3} cascade damping={1e-1} className="text-xl text-white mt-4">
-          This is some text under the title. It can be a description or anything you want.
-        </Fade>
+          {/* h1 and button moved to the bottom */}
+          {!showDescription && (
+            <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-center z-10">
+              <h1
+                className="text-3xl text-white p-4 rounded-lg"
+                style={{
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: 'normal',
+                  textTransform: 'uppercase'
+                }}
+              >
+                {slides[currentSlide].text}
+              </h1>
+              <a
+                className="mt-2 px-4 py-1 text-sm text-white uppercase border-2 rounded-full hover:bg-white hover:text-black transition-colors duration-300"
+                onClick={handleEnSavoirPlusClick}
+              >
+                En savoir plus
+              </a>
+            </div>
+          )}
+
+          {/* Description and back button */}
+          {showDescription && (
+            <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-center z-10">
+              <p
+                className="text-3xl text-white p-4 rounded-lg"
+                style={{
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: 'normal',
+                  textTransform: 'uppercase'
+                }}
+              >
+                {slides[currentSlide].description}
+              </p>
+              <button
+                className="mt-2 px-4 py-1 text-sm text-white uppercase border-2 rounded-full hover:bg-white hover:text-black transition-colors duration-300"
+                onClick={handleBackClick}
+              >
+                Retour
+              </button>
+            </div>
+          )}
+
+          {/* Slide indicators */}
+          {!showDescription && (
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                    currentSlide === index ? 'bg-white' : 'bg-gray-500'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-
-      {/* "Back" button */}
-      <button className="absolute bottom-8 right-8 px-6 py-2 text-white text-lg bg-transparent border-none cursor-pointer group">
-        <span className="relative inline-block">
-          Back
-          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
-        </span>
-      </button>
-
-      {/* "Voir l'illustration" button */}
-      <button
-        onClick={handleUnblur}
-        className={`absolute bottom-8 left-1/2 transform -translate-x-1/2 px-6 py-2 text-white text-lg bg-transparent border-none cursor-pointer group transition-opacity duration-500 ${
-          isBlurred ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-      >
-        <span className="relative inline-block">
-          Voir l'illustration
-          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
-        </span>
-      </button>
-    </div>
+    </section>
   );
-};
-
-export default Michelodile;
+}
