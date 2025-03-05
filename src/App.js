@@ -7,6 +7,7 @@ import Vr from './components/Vr';
 import Footer from './components/footer';
 import Doc from './components/doc';
 import Carte from './components/carte';
+import Livre from './components/Livre';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <>
         <Welcome />
         <Anneback />
+        <Livre />
         <Histoires />
         <Doc />
         <Carte />
