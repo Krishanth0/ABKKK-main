@@ -32,7 +32,7 @@ const Welcome = () => {
       <motion.img
         src={inkbot}
         alt="Bottom Ink"
-        className="absolute bottom-0 left-0 w-full"
+        className="absolute bottom-2 left-0 w-full"
         initial={{ opacity: 0, scale: 0.8 }} // Start with low opacity and slightly smaller scale
         animate={{ opacity: 1, scale: 1 }} // Fade in and scale to normal size
         transition={{ duration: 2, ease: 'easeOut', delay: 1 }} // Smooth transition with delay

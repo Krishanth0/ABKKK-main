@@ -14,14 +14,14 @@ function Vr() {
         <div className="watercolor watercolor-3 absolute rounded-full mix-blend-lighten animate-watercolor"></div>
       </div>
 
-      <div className="text-center text-black relative z-10">
+      <div className=" text-black relative z-10">
         <h2 className="text-xl md:text-2xl font-light uppercase transition-colors duration-300 group-hover:text-white" 
             style={{ fontStyle: 'normal', fontWeight: 400, lineHeight: 'normal' }}>
           VIVEZ Experience
         </h2>
         <h1 className="text-4xl md:text-8xl font-bold uppercase transition-colors duration-300 group-hover:text-white" 
             style={{ fontStyle: 'normal', fontWeight: 400, lineHeight: 'normal' }}>
-          Anne BACK
+          MONOCHROMES
         </h1>
         <h2 className="text-xl md:text-2xl font-light uppercase transition-colors duration-300 group-hover:text-white" 
             style={{ fontStyle: 'normal', fontWeight: 400, lineHeight: 'normal' }}>
@@ -31,7 +31,7 @@ function Vr() {
 
       <a 
         href="https://store.steampowered.com/" 
-        className="absolute bottom-10 text-black text-[16px] uppercase no-underline hover:no-underline relative z-10"
+        className="absolute bottom-12 text-black text-[16px] uppercase no-underline hover:no-underline group-hover:text-white z-10"
       >
         En savoir plus
         <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-300 ease-in-out group-hover:w-full"></span>
