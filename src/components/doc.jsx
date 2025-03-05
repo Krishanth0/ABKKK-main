@@ -60,13 +60,13 @@ function VideoPage() {
 
   return (
     <section className="h-screen w-full bg-white flex items-center justify-center relative overflow-hidden">
-            <h1
-        className="absolute top-6 left-6 text-3xl font-bold text-black z-10 uppercase"
+      <h1
+        className="absolute top-6 text-3xl font-bold text-black z-10 uppercase"
         style={{ fontWeight: 400 }}
       >
         Découvrez leurs histoires
       </h1>
-      
+
       <div
         className="relative w-4/5 h-4/5"
         onMouseEnter={() => setIsHovered(true)}
@@ -80,16 +80,22 @@ function VideoPage() {
           loop
         />
 
-        {/* Hover overlay */}
+        {/* Hover overlay - Bottom Left */}
         <div
-          className={`absolute inset-0 bg-gradient-to-b from-black/60 to-transparent flex flex-col justify-center items-center transition-opacity duration-500 ease-in-out ${
+          className={`absolute bottom-14 left-4 p-6 transition-opacity duration-500 ease-in-out ${
             isHovered ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <h1 className="text-white text-5xl font-serif uppercase tracking-wide mb-6" style={{ textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)' }}>
+          <h1
+            className="text-white text-3xl font-bold uppercase tracking-wide mb-4"
+            style={{ fontWeight: 400, textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)' }}
+          >
             Video Title
           </h1>
-          <p className="text-gray-200 text-lg max-w-lg text-center font-light leading-relaxed">
+          <p
+            className="text-white text-xl font-bold uppercase max-w-md"
+            style={{ fontWeight: 400 }}
+          >
             This is a brief description of the video content. It appears with a smooth fade when you hover over the video.
           </p>
         </div>

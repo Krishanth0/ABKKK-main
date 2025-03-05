@@ -1,113 +1,152 @@
-import React from 'react';
-import bg from '../assets/DOOR.png';
+import React, { useState } from 'react';
+import bg1 from '../assets/DOOR.png'; // First background
+import bg2 from '../assets/DOOR2.png'; // Second background
+import inkSprite from '../assets/ink-transition-sprite.png'; // Ink transition sprite
 
 function Vr() {
+  const [isLinkHovered, setIsLinkHovered] = useState(false);
+
   return (
-    <section 
-      className="h-screen flex flex-col items-center justify-center relative bg-cover group" 
-      style={{ backgroundImage: `url(${bg})` }}
-    >
-      {/* Watercolor paint animation background */}
-      <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none overflow-hidden -z-10">
-        <div className="watercolor watercolor-1 absolute rounded-full mix-blend-lighten animate-watercolor"></div>
-        <div className="watercolor watercolor-2 absolute rounded-full mix-blend-lighten animate-watercolor-delay"></div>
-        <div className="watercolor watercolor-3 absolute rounded-full mix-blend-lighten animate-watercolor"></div>
-      </div>
+    <>
+      <style>
+        {`
+          .ink-transition {
+            background-size: 100% 100%;
+            height: 100%;
+            left: 50%;
+            position: absolute;
+            top: 0;
+            transform: translateX(-1.25%);
+            width: 4000%; /* 40 frames * 100% */
+            z-index: 5;
+            opacity: 1;
+          }
 
-      <div className=" text-black relative z-10">
-        <h2 className="text-xl md:text-2xl font-light uppercase transition-colors duration-300 group-hover:text-white" 
-            style={{ fontStyle: 'normal', fontWeight: 400, lineHeight: 'normal' }}>
-          VIVEZ Experience
-        </h2>
-        <h1 className="text-4xl md:text-8xl font-bold uppercase transition-colors duration-300 group-hover:text-white" 
-            style={{ fontStyle: 'normal', fontWeight: 400, lineHeight: 'normal' }}>
-          MONOCHROMES
-        </h1>
-        <h2 className="text-xl md:text-2xl font-light uppercase transition-colors duration-300 group-hover:text-white" 
-            style={{ fontStyle: 'normal', fontWeight: 400, lineHeight: 'normal' }}>
-          En VR
-        </h2>
-      </div>
+          /* Forward animation when hovered */
+          .ink-transition.is-active {
+            animation: ink-transition-forward 2s steps(39) 0.5s forwards;
+          }
 
-      <a 
-        href="https://store.steampowered.com/" 
-        className="absolute bottom-12 text-black text-[16px] uppercase no-underline hover:no-underline group-hover:text-white z-10"
+          /* Reverse animation when not hovered */
+          .ink-transition:not(.is-active) {
+            animation: ink-transition-reverse 2s steps(39) 0s forwards;
+          }
+
+          @keyframes ink-transition-forward {
+            0% {
+              transform: translateX(-1.25%);
+              opacity: 1;
+            }
+            99% {
+              transform: translateX(-98.75%);
+              opacity: 1;
+            }
+            100% {
+              transform: translateX(-98.75%);
+              opacity: 0;
+            }
+          }
+
+          @keyframes ink-transition-reverse {
+            0% {
+              transform: translateX(-98.75%);
+              opacity: 0;
+            }
+            1% {
+              opacity: 1; /* Ensure it becomes visible for reverse animation */
+            }
+            100% {
+              transform: translateX(-1.25%);
+              opacity: 1;
+            }
+          }
+
+          /* Ensure the section is positioned correctly */
+          .vr-section {
+            overflow: hidden;
+            position: relative;
+          }
+
+          /* Text color transition */
+          .text-content {
+            transition: color 0.5s ease-in-out;
+          }
+
+          /* Watercolor overlay transition */
+          .watercolor-overlay {
+            transition: opacity 1s ease-in-out;
+          }
+
+          /* Existing watercolor animation styles (assumed from your original code) */
+          .watercolor-splash-1 {
+            /* Add your watercolor splash styles here if needed */
+          }
+          .watercolor-splash-2 {
+            /* Add your watercolor splash styles here if needed */
+          }
+          .watercolor-splash-3 {
+            /* Add your watercolor splash styles here if needed */
+          }
+        `}
+      </style>
+      <section
+        className="vr-section h-screen flex flex-col items-center justify-center relative bg-cover transition-all duration-1000 ease-in-out"
+        style={{ backgroundImage: `url(${isLinkHovered ? bg2 : bg1})` }}
       >
-        En savoir plus
-        <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-300 ease-in-out group-hover:w-full"></span>
-      </a>
+        {/* Ink Transition Overlay */}
+        <div
+          className={`ink-transition absolute inset-0 pointer-events-none ${
+            isLinkHovered ? 'is-active' : ''
+          }`}
+          style={{
+            backgroundImage: `url(${inkSprite})`,
+          }}
+        ></div>
 
-      {/* CSS Animation */}
-      <style jsx>{`
-        .watercolor {
-          opacity: 0.3;
-          filter: blur(20px);
-          transform-origin: center;
-        }
+        {/* Watercolor overlay */}
+        <div
+          className={`watercolor-overlay absolute inset-0 pointer-events-none ${
+            isLinkHovered ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <div className="absolute watercolor-splash-1 rounded-full mix-blend-overlay animate-watercolor-splash"></div>
+          <div className="absolute watercolor-splash-2 rounded-full mix-blend-overlay animate-watercolor-splash-delay"></div>
+          <div className="absolute watercolor-splash-3 rounded-full mix-blend-overlay animate-watercolor-splash"></div>
+        </div>
 
-        .watercolor-1 {
-          width: 300px;
-          height: 300px;
-          top: 20%;
-          left: 15%;
-          background: radial-gradient(circle, #ff6b6b, transparent);
-        }
+        <div className={`text-content relative z-10 ${isLinkHovered ? 'text-white' : 'text-black'}`}>
+          <h2
+            className="text-xl md:text-2xl font-light uppercase"
+            style={{ fontStyle: 'normal', fontWeight: 400, lineHeight: 'normal' }}
+          >
+            VIVEZ Experience
+          </h2>
+          <h1
+            className="text-4xl md:text-8xl font-bold uppercase"
+            style={{ fontStyle: 'normal', fontWeight: 400, lineHeight: 'normal' }}
+          >
+            MONOCHROMES
+          </h1>
+          <h2
+            className="text-xl md:text-2xl font-light uppercase"
+            style={{ fontStyle: 'normal', fontWeight: 400, lineHeight: 'normal' }}
+          >
+            En VR
+          </h2>
+        </div>
 
-        .watercolor-2 {
-          width: 400px;
-          height: 400px;
-          top: 50%;
-          right: 20%;
-          background: radial-gradient(circle, #4ecdc4, transparent);
-        }
-
-        .watercolor-3 {
-          width: 250px;
-          height: 250px;
-          bottom: 15%;
-          left: 40%;
-          background: radial-gradient(circle, #ffe66d, transparent);
-        }
-
-        @keyframes watercolor {
-          0% { 
-            transform: scale(0.8) translate(-20px, -20px); 
-            opacity: 0.2;
-          }
-          50% { 
-            transform: scale(1.1) translate(20px, 20px); 
-            opacity: 0.4;
-          }
-          100% { 
-            transform: scale(0.8) translate(-20px, -20px); 
-            opacity: 0.2;
-          }
-        }
-
-        @keyframes watercolor-delay {
-          0% { 
-            transform: scale(0.9) translate(15px, 15px); 
-            opacity: 0.2;
-          }
-          50% { 
-            transform: scale(1.2) translate(-15px, -15px); 
-            opacity: 0.4;
-          }
-          100% { 
-            transform: scale(0.9) translate(15px, 15px); 
-            opacity: 0.2;
-          }
-        }
-
-        .animate-watercolor {
-          animation: watercolor 6s infinite ease-in-out;
-        }
-
-        .animate-watercolor-delay {
-          animation: watercolor-delay 5s infinite ease-in-out;
-        }
-      `}</style>
-    </section>
+        <a
+          href="https://store.steampowered.com/"
+          className={`absolute bottom-12 text-[16px] uppercase no-underline hover:no-underline transition-colors duration-500 ease-in-out z-10 ${
+            isLinkHovered ? 'text-white' : 'text-black'
+          }`}
+          onMouseEnter={() => setIsLinkHovered(true)}
+          onMouseLeave={() => setIsLinkHovered(false)}
+        >
+          En savoir plus
+        </a>
+      </section>
+    </>
   );
 }
 

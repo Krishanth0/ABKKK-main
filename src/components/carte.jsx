@@ -17,7 +17,7 @@ const MapPage = () => {
 
       {/* Header */}
       <h1
-        className="absolute top-6 left-6 text-3xl font-bold text-black z-10 uppercase"
+        className="absolute top-6 text-3xl font-bold text-black z-10 uppercase"
         style={{ fontWeight: 400 }}
       >La Carte
       </h1>

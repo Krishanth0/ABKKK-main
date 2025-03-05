@@ -6,7 +6,7 @@ import Steam from '../assets/Steam.png';
 
 function Footer() {
   return (
-    <section className="w-full bg-[#eeeeee] text-black px-4 md:px-16 lg:px-[200px] py-4">
+    <section className="w-full bg-white text-black px-4 md:px-16 lg:px-[200px] py-4">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-2">
         {/* Logo Section */}
         <div className="flex items-center">
