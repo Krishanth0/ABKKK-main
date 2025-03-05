@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Welcome from './components/Welcome';
-import Anneback from './components/Anneback';
 import Histoires from './components/Histoires';
 import Vr from './components/Vr';
 import Footer from './components/footer';
@@ -22,7 +21,6 @@ function App() {
         {showWelcome && <Welcome onStart={handleStart} />}
         {!showWelcome && (
           <>
-            <Anneback />
             <Livre />
             <Histoires />
             <Doc />
