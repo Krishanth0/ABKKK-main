@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Welcome from './components/Welcome';
 import Anneback from './components/Anneback';
@@ -10,18 +10,27 @@ import Carte from './components/carte';
 import Livre from './components/Livre';
 
 function App() {
+  const [showWelcome, setShowWelcome] = useState(true);
+
+  const handleStart = () => {
+    setShowWelcome(false); // Hide the Welcome component
+  };
+
   return (
     <BrowserRouter>
       <>
-        <Welcome />
-        <Anneback />
-        <Livre />
-        <Histoires />
-        <Doc />
-        <Carte />
-        <Vr />
-        <Footer/>
-
+        {showWelcome && <Welcome onStart={handleStart} />}
+        {!showWelcome && (
+          <>
+            <Anneback />
+            <Livre />
+            <Histoires />
+            <Doc />
+            <Carte />
+            <Vr />
+            <Footer />
+          </>
+        )}
       </>
     </BrowserRouter>
   );
