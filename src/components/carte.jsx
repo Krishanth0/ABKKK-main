@@ -16,11 +16,11 @@ const MapPage = () => {
       </div>
 
       {/* Header */}
-      <header className="absolute top-0 w-full p-6 z-20">
-        <h1 className="text-5xl text-black font-serif font-bold tracking-wider text-center" style={{ textShadow: '3px 3px 6px rgba(0, 0, 0, 0.7)' }}>
-          La Carte
-        </h1>
-      </header>
+      <h1
+        className="absolute top-6 left-6 text-3xl font-bold text-black z-10 uppercase"
+        style={{ fontWeight: 400 }}
+      >La Carte
+      </h1>
 
       {/* Map Container */}
       <div className="relative w-4/5 h-4/5 bg-white/5 backdrop-blur-lg rounded-xl border border-gray-700 shadow-2xl z-10">

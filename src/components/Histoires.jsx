@@ -126,6 +126,14 @@ export default function MO() {
 
   return (
     <section className="h-screen flex items-center justify-center relative overflow-hidden bg-white">
+
+      <h1
+        className="absolute top-6 left-6 text-3xl font-bold text-black z-10 uppercase"
+        style={{ fontWeight: 400 }}
+      >
+        Découvrez leurs histoires
+      </h1>
+
       {/* Slider Container */}
       <div className="w-4/5 h-4/5 relative">
         <div
@@ -134,14 +142,6 @@ export default function MO() {
           }`}
           style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
         >
-          {/* Top-left text */}
-          <h1
-            className="absolute top-6 left-6 text-3xl font-bold text-white z-10 uppercase"
-            style={{ fontWeight: 400 }}
-          >
-            Découvrez leurs histoires
-          </h1>
-
           {/* Bottom content */}
           {!detailedView && (
             <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-center z-10">

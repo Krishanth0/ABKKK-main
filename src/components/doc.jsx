@@ -60,6 +60,13 @@ function VideoPage() {
 
   return (
     <section className="h-screen w-full bg-white flex items-center justify-center relative overflow-hidden">
+            <h1
+        className="absolute top-6 left-6 text-3xl font-bold text-black z-10 uppercase"
+        style={{ fontWeight: 400 }}
+      >
+        Découvrez leurs histoires
+      </h1>
+      
       <div
         className="relative w-4/5 h-4/5"
         onMouseEnter={() => setIsHovered(true)}
