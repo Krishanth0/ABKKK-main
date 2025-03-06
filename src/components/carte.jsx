@@ -93,6 +93,7 @@ const MapPage = () => {
           </ul>
         </div>
       </div>
+      
 
       {/* CSS Animation */}
       <style jsx>{`

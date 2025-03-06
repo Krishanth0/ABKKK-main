@@ -134,6 +134,7 @@ export default function MO() {
 
   return (
     <section className="h-screen flex items-center justify-center relative overflow-hidden bg-white">
+      
       <h1
         className="absolute top-6 text-3xl font-bold text-black z-10 uppercase"
         style={{ fontWeight: 400 }}
