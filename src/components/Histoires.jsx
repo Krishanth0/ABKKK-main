@@ -9,7 +9,7 @@ import audio3 from '../assets/Balenciaga.mp3';
 
 const slides = [
   { image: bg, text: "MICHEL & ODILE", details: { title: "Michel & Odile", description: "This is the story of Michel and Odile.", audio: audio1 } },
-  { image: bg2, text: "CHRISTIAN & MARIE-PAUL", details: { title: "CHRISTIAN & MARIE-PAUL", description: "This is the story of Christian and Marie-Paul.", audio: audio2 } },
+  { image: bg2, text: "CHRISTIAN & MARIE-PAULE", details: { title: "CHRISTIAN & MARIE-PAUL", description: "This is the story of Christian and Marie-Paul.", audio: audio2 } },
   { image: bg3, text: "FRANCIS & HUGETTE", details: { title: "FRANCIS & HUGETTE", description: "This is the story of Hugette.", audio: audio3 } }
 ];
 

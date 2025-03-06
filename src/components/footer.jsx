@@ -79,6 +79,17 @@ function Footer() {
               <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full"></span>
             </ScrollLink>
           </li>
+          <li>
+            <ScrollLink
+              to="about"
+              smooth={true}
+              duration={500}
+              className="relative text-black cursor-pointer transition-colors duration-300 group"
+            >
+              MENTIONS LÉGALES              
+              <span className="absolute left-0 bottom-[-4px] w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full"></span>
+            </ScrollLink>
+          </li>
         </ul>
 
         {/* Steam Link */}

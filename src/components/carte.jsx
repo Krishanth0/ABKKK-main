@@ -64,7 +64,7 @@ const MapPage = () => {
       <div className="w-1/2 h-full flex items-center justify-center relative z-10">
         <div className="w-4/5 h-4/5 bg-white/5 backdrop-blur-lg rounded-xl border border-gray-700">
           <iframe
-            src="https://www.google.com/maps/d/embed?mid=1-YANc3FhyWO529iF795vRe3OINF0pGs&ll=48.671302332527866%2C2.5255770999999827&z=11"
+            src="https://www.google.com/maps/d/embed?mid=1-YANc3FhyWO529iF795vRe3OINF0pGs&ehbc=2E312F"
             width="100%"
             height="100%"
             style={{ border: 0, filter: 'contrast(1.1) brightness(1.2) grayscale(30%)', borderRadius: '12px' }}

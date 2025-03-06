@@ -7,6 +7,7 @@ import Footer from './components/footer';
 import Doc from './components/doc';
 import Carte from './components/carte';
 import Livre from './components/Livre';
+import mentions from './components/mentions';
 
 function App() {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -27,6 +28,7 @@ function App() {
             <Carte />
             <Vr />
             <Footer />
+            <mentions />
           </>
         )}
       </>

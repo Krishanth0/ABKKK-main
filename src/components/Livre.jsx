@@ -5,13 +5,16 @@ import { motion } from 'framer-motion';
 import bookModel from '../assets/book.glb'; // Adjust the path to your model
 
 // Book Component to Load the 3D Model
-const Book = () => {
+const Book = ({ isLarge, onClick }) => {
   const { scene } = useGLTF(bookModel);
-  return <primitive object={scene} scale={[1, 1, 1]} />;
+  // Toggle scale between 1 and 2 when clicked
+  const scale = isLarge ? [2, 2, 2] : [1, 1, 1];
+  return <primitive object={scene} scale={scale} onClick={onClick} />;
 };
 
 const Livre = () => {
   const [isInView, setIsInView] = useState(false);
+  const [isLarge, setIsLarge] = useState(false); // State to track book size
   const sectionRef = useRef(null);
 
   const text =
@@ -44,6 +47,11 @@ const Livre = () => {
     };
   }, []);
 
+  // Handle click to toggle book size
+  const handleBookClick = () => {
+    setIsLarge((prev) => !prev);
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -52,10 +60,16 @@ const Livre = () => {
       {/* Left Side: 3D Book */}
       <div className="w-1/2 h-full flex items-center justify-center">
         <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
-          <ambientLight intensity={0.5} />
+          <ambientLight intensity={2.5} />
           <directionalLight position={[5, 5, 5]} intensity={1} />
-          <Book />
-          <OrbitControls enablePan={false} enableZoom={false} />
+          <Book isLarge={isLarge} onClick={handleBookClick} />
+          <OrbitControls
+            enablePan={false}
+            enableZoom={false}
+            enableRotate={true} // Allow rotation
+            minPolarAngle={Math.PI / 2} // Lock vertical rotation (Y-axis)
+            maxPolarAngle={Math.PI / 2} // Lock vertical rotation (Y-axis)
+          />
         </Canvas>
       </div>
 
@@ -64,7 +78,7 @@ const Livre = () => {
         {/* Book Description with Animation */}
         <div className="text-black">
           <h1
-            className="absolute top-2 text-2xl font-bold text-black z-10 uppercase"
+            className=" y top-2 text-2xl font-bold text-black z-10 uppercase"
             style={{ fontWeight: 400 }}
           >
             À propos de Monochromes
