@@ -131,7 +131,7 @@ export default function MO() {
         className="absolute top-6 text-3xl font-bold text-black z-10 uppercase"
         style={{ fontWeight: 400 }}
       >
-        Découvrez leurs histoires
+        Les Séniors
       </h1>
 
       {/* Slider Container */}

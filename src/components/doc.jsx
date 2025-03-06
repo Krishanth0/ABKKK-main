@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import PAINT from '../assets/PAINT.mp4'; // Imported MP4 file
 
 function VideoPage() {
   const videoRef = useRef(null);
@@ -61,14 +62,14 @@ function VideoPage() {
   return (
     <section className="h-screen w-full bg-white flex items-center justify-center relative overflow-hidden">
       <h1
-        className="absolute top-6 text-3xl font-bold text-black z-10 uppercase"
+        className="absolute top-6 text-9xl font-bold text-black z-10 uppercase"
         style={{ fontWeight: 400 }}
       >
-        Découvrez leurs histoires
+        Monochromes
       </h1>
 
       <div
-        className="relative w-4/5 h-4/5"
+        className="relative w-full h-4/5"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -76,7 +77,7 @@ function VideoPage() {
         <video
           ref={videoRef}
           className="absolute inset-0 w-full h-full object-cover"
-          src="https://www.w3schools.com/html/mov_bbb.mp4" // Replace with your video
+          src={PAINT} // Use the imported MP4 file
           loop
         />
 
@@ -90,11 +91,11 @@ function VideoPage() {
             className="text-white text-3xl font-bold uppercase tracking-wide mb-4"
             style={{ fontWeight: 400, textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)' }}
           >
-            Video Title
+            Penser un livre selon Anne BACK
           </h1>
           <p
             className="text-white text-xl font-bold uppercase max-w-md"
-            style={{ fontWeight: 400 }}
+            style={{ fontWeight: 100 }}
           >
             This is a brief description of the video content. It appears with a smooth fade when you hover over the video.
           </p>

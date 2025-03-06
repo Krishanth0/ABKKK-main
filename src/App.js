@@ -21,9 +21,9 @@ function App() {
         {showWelcome && <Welcome onStart={handleStart} />}
         {!showWelcome && (
           <>
+            <Doc />
             <Livre />
             <Histoires />
-            <Doc />
             <Carte />
             <Vr />
             <Footer />

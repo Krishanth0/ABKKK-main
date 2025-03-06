@@ -19,14 +19,6 @@ const Livre = () => {
 
   return (
     <section className="h-screen w-full bg-white flex items-center justify-center relative overflow-hidden">
-      {/* Title */}
-      <h1
-        className="absolute top-6 text-9xl font-bold text-black z-10 uppercase"
-        style={{ fontWeight: 400 }}
-      >
-        Monochromes
-      </h1>
-
       {/* Left Side: 3D Book */}
       <div className="w-1/2 h-full flex items-center justify-center">
         <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
@@ -38,7 +30,7 @@ const Livre = () => {
       </div>
 
       {/* Right Side: Text and Audio Demo */}
-      <div className="w-1/2 h-full flex flex-col items-start justify-center p-8">
+      <div className="w-1/2 flex flex-col px-[8rem]">
         {/* Book Description with Animation */}
         <div className="text-black">
           <h2 className="text-2xl font-semibold mb-4">About Monochromes</h2>
@@ -100,6 +92,7 @@ const Livre = () => {
             Your browser does not support the audio element.
           </audio>
           <p className="text-sm text-gray-600 mt-2">
+            Démo Audible interpreter par Aurelie LACORDE
           </p>
         </div>
       </div>

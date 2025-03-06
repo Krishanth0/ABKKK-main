@@ -137,7 +137,7 @@ function Vr() {
 
         <a
           href="https://store.steampowered.com/"
-          className={`absolute bottom-12 text-[16px] uppercase no-underline hover:no-underline transition-colors duration-500 ease-in-out z-10 ${
+          className={`absolute bottom-[8rem] text-[16px] uppercase no-underline hover:no-underline transition-colors duration-500 ease-in-out z-10 ${
             isLinkHovered ? 'text-white' : 'text-black'
           }`}
           onMouseEnter={() => setIsLinkHovered(true)}
