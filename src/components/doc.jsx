@@ -8,6 +8,7 @@ function VideoPage() {
   const [volume, setVolume] = useState(1);
   const [progress, setProgress] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -23,9 +24,16 @@ function VideoPage() {
     video.addEventListener('timeupdate', updateProgress);
     video.addEventListener('ended', handleEnded);
 
+    // Listen for fullscreen changes
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+
     return () => {
       video.removeEventListener('timeupdate', updateProgress);
       video.removeEventListener('ended', handleEnded);
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
   }, []);
 
@@ -59,6 +67,27 @@ function VideoPage() {
     }
   };
 
+  const toggleFullscreen = () => {
+    const video = videoRef.current;
+    if (!isFullscreen) {
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else if (video.webkitRequestFullscreen) { // Safari
+        video.webkitRequestFullscreen();
+      } else if (video.msRequestFullscreen) { // IE11
+        video.msRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) { // Safari
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { // IE11
+        document.msExitFullscreen();
+      }
+    }
+  };
+
   return (
     <section className="h-screen w-full bg-white flex items-center justify-center relative overflow-hidden">
       <h1
@@ -67,6 +96,19 @@ function VideoPage() {
       >
         Monochromes
       </h1>
+
+      {/* Scroll Down Arrow */}
+      <div className="absolute bottom-4 right-4 z-10">
+        <svg
+          className="w-8 h-8 text-black animate-bounce"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+      </div>
 
       <div
         className="relative w-full h-4/5"
@@ -167,6 +209,23 @@ function VideoPage() {
                   background: `linear-gradient(to right, #fff ${volume * 100}%, #666 ${volume * 100}%)`,
                 }}
               />
+
+              {/* Fullscreen Button */}
+              <button
+                onClick={toggleFullscreen}
+                className="p-2 text-white bg-white/20 hover:bg-white/40 rounded-full transition-all duration-300"
+                aria-label={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+              >
+                {isFullscreen ? (
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M5 16h3v3h2v-5H5v2zm8 0h3v2h-5v-5h2v3zm-8-9V5h5v2H7zm8 0h3v5h-2V7z" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+                  </svg>
+                )}
+              </button>
             </div>
           </div>
         </div>
@@ -197,6 +256,22 @@ function VideoPage() {
           cursor: pointer;
           border: 1px solid #ccc;
           box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .animate-bounce {
+          animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+          0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+          }
+          40% {
+            transform: translateY(-10px);
+          }
+          60% {
+            transform: translateY(-5px);
+          }
         }
       `}</style>
     </section>

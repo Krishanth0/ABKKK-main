@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
 import { motion } from 'framer-motion';
@@ -11,14 +11,44 @@ const Book = () => {
 };
 
 const Livre = () => {
+  const [isInView, setIsInView] = useState(false);
+  const sectionRef = useRef(null);
+
   const text =
     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
   const characters = text.split('');
   const anneBackText = "- Anne Back";
   const anneBackCharacters = anneBackText.split('');
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect(); // Stop observing once it's in view
+        }
+      },
+      {
+        threshold: 0.3, // Trigger when 30% of the section is visible
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <section className="h-screen w-full bg-white flex items-center justify-center relative overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="h-screen w-full bg-white flex items-center justify-center relative overflow-hidden"
+    >
       {/* Left Side: 3D Book */}
       <div className="w-1/2 h-full flex items-center justify-center">
         <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
@@ -33,7 +63,12 @@ const Livre = () => {
       <div className="w-1/2 flex flex-col px-[8rem]">
         {/* Book Description with Animation */}
         <div className="text-black">
-          <h2 className="text-2xl font-semibold mb-4">About Monochromes</h2>
+          <h1
+            className="absolute top-2 text-2xl font-bold text-black z-10 uppercase"
+            style={{ fontWeight: 400 }}
+          >
+            À propos de Monochromes
+          </h1>
           <motion.div
             style={{ fontFamily: "'Bodoni Moda', serif" }}
             className="text-[20px] leading-relaxed text-black"
@@ -44,7 +79,7 @@ const Livre = () => {
                 <motion.span
                   key={index}
                   initial={{ opacity: 0, filter: 'blur(5px)' }}
-                  animate={{ opacity: 1, filter: 'blur(0px)' }}
+                  animate={isInView ? { opacity: 1, filter: 'blur(0px)' } : { opacity: 0, filter: 'blur(5px)' }}
                   transition={{
                     delay: index * 0.02,
                     duration: 1,
@@ -66,7 +101,7 @@ const Livre = () => {
                 <motion.span
                   key={index}
                   initial={{ opacity: 0, filter: 'blur(5px)' }}
-                  animate={{ opacity: 1, filter: 'blur(0px)' }}
+                  animate={isInView ? { opacity: 1, filter: 'blur(0px)' } : { opacity: 0, filter: 'blur(5px)' }}
                   transition={{
                     delay: characters.length * 0.02 + index * 0.02,
                     duration: 1,
@@ -92,7 +127,7 @@ const Livre = () => {
             Your browser does not support the audio element.
           </audio>
           <p className="text-sm text-gray-600 mt-2">
-            Démo Audible interpreter par Aurelie LACORDE
+            Démo Audible interprétée par Aurélie LACORDE
           </p>
         </div>
       </div>

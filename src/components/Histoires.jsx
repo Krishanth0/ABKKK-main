@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import bg from '../assets/michel.png';
 import bg2 from '../assets/blue6.png';
 import bg3 from '../assets/hug.png';
@@ -66,7 +67,7 @@ export default function MO() {
     setTimeout(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
       setIsTransitioning(false);
-    }, 300);
+    }, 500); // Match fade duration
   };
 
   const prevSlide = () => {
@@ -79,7 +80,7 @@ export default function MO() {
     setTimeout(() => {
       setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
       setIsTransitioning(false);
-    }, 300);
+    }, 500); // Match fade duration
   };
 
   const handleSlideChange = (index) => {
@@ -93,7 +94,7 @@ export default function MO() {
       setCurrentSlide(index);
       setIsTransitioning(false);
       setDetailedView(false);
-    }, 300);
+    }, 500); // Match fade duration
   };
 
   const toggleAudio = () => {
@@ -124,9 +125,15 @@ export default function MO() {
     }
   };
 
+  // Fade animation variants for slides
+  const fadeVariants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1, transition: { duration: 0.5, ease: 'easeInOut' } },
+    exit: { opacity: 0, transition: { duration: 0.5, ease: 'easeInOut' } },
+  };
+
   return (
     <section className="h-screen flex items-center justify-center relative overflow-hidden bg-white">
-
       <h1
         className="absolute top-6 text-3xl font-bold text-black z-10 uppercase"
         style={{ fontWeight: 400 }}
@@ -136,73 +143,93 @@ export default function MO() {
 
       {/* Slider Container */}
       <div className="w-4/5 h-4/5 relative">
-        <div
-          className={`w-full h-full bg-cover bg-center flex flex-col items-center justify-center transition-all duration-300 ease-in-out ${
-            isTransitioning ? 'opacity-0 translate-x-10' : 'opacity-100 translate-x-0'
-          }`}
-          style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
-        >
-          {/* Bottom content */}
-          {!detailedView && (
-            <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-center z-10">
-              <h1
-                className="text-4xl text-white bg-black/50 p-4 rounded-lg uppercase"
-                style={{ fontWeight: 400 }}
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={currentSlide}
+            className="w-full h-full bg-cover bg-center flex flex-col items-center justify-center absolute inset-0"
+            style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
+            variants={fadeVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            {/* Bottom content */}
+            {!detailedView && (
+              <motion.div
+                className="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-center z-10"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
               >
-                {slides[currentSlide].text}
-              </h1>
-              <button
-                onClick={handleEnSavoirPlusClick}
-                className="mt-4 px-6 py-2 text-white uppercase border-2 border-white rounded-full hover:bg-white hover:text-black transition-all duration-300"
-              >
-                En savoir plus
-              </button>
-            </div>
-          )}
-
-          {/* Slide selectors */}
-          {!detailedView && (
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-              {slides.map((_, index) => (
+                <h1
+                  className="text-4xl text-white bg-black/50 p-4 rounded-lg uppercase"
+                  style={{ fontWeight: 400 }}
+                >
+                  {slides[currentSlide].text}
+                </h1>
                 <button
-                  key={index}
-                  onClick={() => handleSlideChange(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    currentSlide === index ? 'bg-white scale-125' : 'bg-gray-500'
-                  }`}
-                />
-              ))}
-            </div>
-          )}
+                  onClick={handleEnSavoirPlusClick}
+                  className="mt-4 px-6 py-2 text-white uppercase border-2 border-white rounded-full hover:bg-white hover:text-black transition-all duration-300"
+                >
+                  En savoir plus
+                </button>
+              </motion.div>
+            )}
 
-          {/* Navigation Arrows */}
-          {!detailedView && (
-            <>
-              <button
-                onClick={prevSlide}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-5xl z-10 hover:text-gray-300 transition-colors duration-300"
-              >
-                ‹
-              </button>
-              <button
-                onClick={nextSlide}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-5xl z-10 hover:text-gray-300 transition-colors duration-300"
-              >
-                ›
-              </button>
-            </>
-          )}
+            {/* Slide selectors */}
+            {!detailedView && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+                {slides.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSlideChange(index)}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      currentSlide === index ? 'bg-white scale-125' : 'bg-gray-500'
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
 
-          {/* Detailed View */}
+            {/* Navigation Arrows */}
+            {!detailedView && (
+              <>
+                <button
+                  onClick={prevSlide}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-5xl z-10 hover:text-gray-300 transition-colors duration-300"
+                >
+                  ‹
+                </button>
+                <button
+                  onClick={nextSlide}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-5xl z-10 hover:text-gray-300 transition-colors duration-300"
+                >
+                  ›
+                </button>
+              </>
+            )}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Detailed View */}
+        <AnimatePresence>
           {detailedView && (
-            <div
-              className="absolute inset-0 w-full h-full bg-cover bg-center flex z-20 transition-opacity duration-500 ease-in-out"
+            <motion.div
+              className="absolute inset-0 w-full h-full bg-cover bg-center flex z-20"
               style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
+              variants={fadeVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
             >
-              <div className="w-1/2 h-full flex flex-col justify-center p-12 bg-gradient-to-r from-black/80 to-transparent shadow-lg">
+              <motion.div
+                className="w-1/2 h-full flex flex-col justify-center p-12 bg-gradient-to-r from-black/80 to-transparent shadow-lg"
+                variants={fadeVariants}
+              >
                 <h1
                   className="text-5xl font-serif text-white mb-6 uppercase tracking-wide"
-                  style={{ fontWeight: 600, textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}
+                  style={{ fontWeight: 400, textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}
                 >
                   {slides[currentSlide].details.title}
                 </h1>
@@ -257,10 +284,10 @@ export default function MO() {
                 >
                   Back
                 </button>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           )}
-        </div>
+        </AnimatePresence>
       </div>
 
       {/* CSS */}

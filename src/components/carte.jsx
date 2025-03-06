@@ -3,12 +3,49 @@ import React, { useState } from 'react';
 const MapPage = () => {
   const [selectedPoint, setSelectedPoint] = useState(null);
 
+  // Legend data organized by categories
+  const legendItems = [
+    // Points de rencontre
+    { title: "Théâtre-Sénart, Scène nationale", description: "A cultural meeting point in Sénart." },
+    { title: "Parc Caillebotte", description: "A scenic park for community gatherings." },
+    
+    // EHPAD
+    { title: "Les Cedres Bleus", description: "An EHPAD offering senior care." },
+    { title: "Maison de retraite - Ehpad Les Fleurs Bleues", description: "A retirement home with dedicated services." },
+    { title: "EHPAD Les Jardins de Thiais", description: "Senior living in Thiais." },
+    { title: "EHPAD Résidence Médicis Viry-Châtillon", description: "Care facility in Viry-Châtillon." },
+    { title: "Ehpad Association Adef Résidences la Maison du Cèdre Bleu", description: "Adef-managed senior residence." },
+    { title: "Clinalliance Ehpad Repotel Savigny-le-Temple", description: "Senior care in Savigny-le-Temple." },
+    { title: "Ehpad Association Adef Résidences la Maison des Clématites", description: "Another Adef senior home." },
+    { title: "EHPAD La Fontaine Médicis Saint-Germain-lès-Corbeil", description: "Senior living in Saint-Germain-lès-Corbeil." },
+    { title: "Clinalliance Ehpad Repotel Lieusaint", description: "EHPAD in Lieusaint." },
+    { title: "Ehpad associatif Adef Résidences la Maison du Grand Chêne", description: "Adef’s Grand Chêne residence." },
+    { title: "Solemnes Savigny", description: "Senior care facility in Savigny." },
+    { title: "EHPAD Les Jardins d'Iroise de Dammarie-les-Lys", description: "Senior residence in Dammarie-les-Lys." },
+    
+    // Zones
+    { title: "Carré Sénart", description: "A vibrant commercial and social hub." },
+    
+    // Résidences séniors
+    { title: "Résidences les Héspérides", description: "Senior living community." },
+    { title: "Résidence Château de Champlâtreux - emeis", description: "Luxury senior residence." },
+    { title: "Maison d'accueil Galignani", description: "Welcoming home for seniors." },
+    
+    // Contacts personnels
+    { title: "Séniors - Alexandre", description: "Personal contact for senior support." },
+    { title: "Résidence Séniors - Clément", description: "Contact for senior residences." },
+    
+    // Associations
+    { title: "Les Petits Frères des Pauvres - Villeneuve-Le-Roi", description: "Support for the elderly in Villeneuve-Le-Roi." },
+    { title: "Association Le bel âge", description: "Promoting well-being for seniors." },
+  ];
+
   const handlePointClick = (title, description) => {
     setSelectedPoint({ title, description });
   };
 
   return (
-    <div className="h-screen w-full bg-white text-white flex items-center justify-center overflow-hidden relative">
+    <div className="h-screen w-full bg-white text-white flex overflow-hidden relative">
       {/* Ink splash background effect */}
       <div className="absolute inset-0 opacity-25 pointer-events-none">
         <div className="w-80 h-80 bg-gray-300 rounded-full absolute top-1/5 left-1/5 transform -translate-x-1/2 -translate-y-1/2 blur-3xl animate-ink"></div>
@@ -17,54 +54,45 @@ const MapPage = () => {
 
       {/* Header */}
       <h1
-        className="absolute top-6 text-3xl font-bold text-black z-10 uppercase"
+        className="absolute top-6 left-1/2 transform -translate-x-1/2 text-3xl font-bold text-black z-10 uppercase"
         style={{ fontWeight: 400 }}
-      >La Carte
+      >
+        La Carte
       </h1>
 
-      {/* Map Container */}
-      <div className="relative w-4/5 h-4/5 bg-white/5 backdrop-blur-lg rounded-xl border border-gray-700 shadow-2xl z-10">
-        <iframe
-          src="https://www.google.com/maps/d/embed?mid=1-YANc3FhyWO529iF795vRe3OINF0pGs&ll=48.671302332527866%2C2.5255770999999827&z=11"
-          width="100%"
-          height="100%"
-          style={{ border: 0, filter: 'contrast(1.1) brightness(1.2) grayscale(30%)', borderRadius: '12px' }}
-          allowFullScreen=""
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        ></iframe>
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-br from-transparent to-black/40 rounded-xl"></div>
-        <div className="absolute top-4 left-4 bg-black/70 text-white text-sm px-4 py-1 rounded-full shadow-lg">
-          Région Parisienne
+      {/* Left: Map Container */}
+      <div className="w-1/2 h-full flex items-center justify-center relative z-10">
+        <div className="w-4/5 h-4/5 bg-white/5 backdrop-blur-lg rounded-xl border border-gray-700">
+          <iframe
+            src="https://www.google.com/maps/d/embed?mid=1-YANc3FhyWO529iF795vRe3OINF0pGs&ll=48.671302332527866%2C2.5255770999999827&z=11"
+            width="100%"
+            height="100%"
+            style={{ border: 0, filter: 'contrast(1.1) brightness(1.2) grayscale(30%)', borderRadius: '12px' }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
         </div>
       </div>
 
-      {/* Sliding Sidebar */}
-      <div
-        className={`absolute top-0 left-0 h-full w-96 bg-gradient-to-r from-black/95 to-gray-900/85 backdrop-blur-xl transform transition-transform duration-700 ease-in-out z-20 ${
-          selectedPoint ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
-        {selectedPoint ? (
-          <div className="p-8 h-full flex flex-col justify-between">
-            <div>
-              <h2 className="text-4xl font-serif font-semibold text-white mb-6 tracking-wide" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>
-                {selectedPoint.title}
-              </h2>
-              <p className="text-gray-200 text-lg font-light leading-relaxed">
-                {selectedPoint.description}
-              </p>
-            </div>
-            <button
-              onClick={() => setSelectedPoint(null)}
-              className="px-6 py-3 text-white uppercase bg-white/15 hover:bg-white/25 rounded-full transition-all duration-300 w-fit text-sm font-medium shadow-md"
-            >
-              Fermer
-            </button>
-          </div>
-        ) : null}
+      {/* Right: Legend Section */}
+      <div className="w-1/2 h-full flex items-center justify-center relative z-10">
+        <div className="w-4/5 h-4/5 p-8 flex flex-col overflow-y-auto">
+          <h2 className="text-2xl font-semibold text-black mb-6">Légende</h2>
+          <ul className="space-y-4">
+            {legendItems.map((item, index) => (
+              <li key={index}>
+                <button
+                  onClick={() => handlePointClick(item.title, item.description)}
+                  className="text-lg text-black hover:text-gray-700 transition-colors duration-300 w-full text-left py-2 px-4 rounded-lg hover:bg-gray-200/50"
+                >
+                  {item.title}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-
 
       {/* CSS Animation */}
       <style jsx>{`
@@ -86,6 +114,11 @@ const MapPage = () => {
 
         .animate-ink-delay {
           animation: ink-delay 5s infinite ease-in-out;
+        }
+
+        /* Ensure the legend section scrolls if content overflows */
+        .overflow-y-auto {
+          overflow-y: auto;
         }
       `}</style>
     </div>
