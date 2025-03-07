@@ -139,7 +139,6 @@ function VideoPage() {
             className="text-white text-xl font-bold uppercase max-w-md"
             style={{ fontWeight: 100 }}
           >
-            This is a brief description of the video content. It appears with a smooth fade when you hover over the video.
           </p>
         </div>
 

@@ -18,8 +18,12 @@ const Livre = () => {
   const sectionRef = useRef(null);
 
   const text =
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
-  const characters = text.split('');
+    "Je suis l’écrivaine d’un tout nouveau roman que j’aime présenter sous le genre d’un roman illustré. " +
+    "Mélangeant la fiction et la réalité, ce livre retranscrit les souvenirs de seniors bien réels en les " +
+    "inscrivant dans une histoire fictionnelle. Ainsi, cet ouvrage permet de conserver leurs mémoires " +
+    "d’une manière certes plus romancée, mais dans le but de toucher un public plus large et toujours " +
+    "dans le respect des entretiens que j’ai pu réaliser.";
+  const characters = text.split(''); 
   const anneBackText = "- Anne Back";
   const anneBackCharacters = anneBackText.split('');
 
@@ -74,21 +78,24 @@ const Livre = () => {
       </div>
 
       {/* Right Side: Text and Audio Demo */}
-      <div className="w-1/2 flex flex-col px-[8rem]">
+      <div className="w-1/2 flex flex-col px-[8rem] py-4">
         {/* Book Description with Animation */}
-        <div className="text-black">
+        <div className="text-black relative">
           <h1
-            className=" y top-2 text-2xl font-bold text-black z-10 uppercase"
+            className="absolute top-2 left-0 text-2xl font-bold text-black z-10 uppercase"
             style={{ fontWeight: 400 }}
           >
             À propos de Monochromes
           </h1>
           <motion.div
             style={{ fontFamily: "'Bodoni Moda', serif" }}
-            className="text-[20px] leading-relaxed text-black"
+            className="text-[20px] leading-relaxed text-black mt-12"
           >
             {/* Main text */}
-            <motion.div className="text-justify text-black">
+            <motion.div
+              className="text-justify text-black"
+              style={{ whiteSpace: 'pre-wrap' }} // Preserve spaces and line breaks
+            >
               {characters.map((char, index) => (
                 <motion.span
                   key={index}
@@ -99,7 +106,7 @@ const Livre = () => {
                     duration: 1,
                     ease: 'easeOut',
                   }}
-                  style={{ display: 'inline-block', color: '#000000' }}
+                  style={{ display: 'inline-block', color: '#000000', whiteSpace: 'pre' }} // Preserve space visibility
                 >
                   {char}
                 </motion.span>
@@ -121,7 +128,7 @@ const Livre = () => {
                     duration: 1,
                     ease: 'easeOut',
                   }}
-                  style={{ display: 'inline-block', color: '#000000' }}
+                  style={{ display: 'inline-block', color: '#000000', whiteSpace: 'pre' }}
                 >
                   {char}
                 </motion.span>

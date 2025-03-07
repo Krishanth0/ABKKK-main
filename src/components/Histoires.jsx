@@ -8,9 +8,55 @@ import audio2 from '../assets/Balenciaga.mp3';
 import audio3 from '../assets/Balenciaga.mp3';
 
 const slides = [
-  { image: bg, text: "MICHEL & ODILE", details: { title: "Michel & Odile", description: "This is the story of Michel and Odile.", audio: audio1 } },
-  { image: bg2, text: "CHRISTIAN & MARIE-PAULE", details: { title: "CHRISTIAN & MARIE-PAUL", description: "This is the story of Christian and Marie-Paul.", audio: audio2 } },
-  { image: bg3, text: "FRANCIS & HUGETTE", details: { title: "FRANCIS & HUGETTE", description: "This is the story of Hugette.", audio: audio3 } }
+  {
+    image: bg,
+    text: "MICHEL & ODILE",
+    details: {
+      title: "Michel & Odile CAILLEUX",
+      description:
+        "« On a vécu heureux. Mais c’est maintenant qu’on se rend compte qu’on a été heureux. »\n" +
+        "Alors qu’ils étaient tous deux invités lors d’un mariage d’une de leurs connaissances en commun, " +
+        "ils s’y sont rencontrés et ont fait connaissance alors qu’Odile était âgée de 16 ans et que Michel " +
+        "avait lui 17 ans. Née d’une coïncidence marquante et inoubliable, cette première rencontre marque " +
+        "alors le début de leur histoire d’amour. Lorsqu’ils avaient 22 ans, ils achetèrent leur premier " +
+        "appartement ensemble symbolisant ainsi leur passage à l’âge adulte, l’indépendance et leur " +
+        "volonté de construire une vie ensemble. Leurs souvenirs marquants furent sans doute leurs " +
+        "vacances mémorables avec leurs 8 petits-enfants. Ces moments montrent leur engagement envers " +
+        "la famille et la joie partagée malgré les contraintes qu’une famille nombreuse peut rencontrer. À " +
+        "leurs 42 ans, ils déménagèrent dans un lieu plus grand : un pavillon. Y vivant encore aujourd’hui " +
+        "alors qu’ils sont âgés de 80 et 81 ans, ils vivent heureux",
+      audio: audio1,
+    },
+  },
+  {
+    image: bg2,
+    text: "CHRISTIAN & MARIE-PAULE",
+    details: {
+      title: "Christian et Marie-Paule LAMY",
+      description: "This is the story of Christian and Marie-Paul.",
+      audio: audio2,
+    },
+  },
+  {
+    image: bg3,
+    text: "FRANCIS & HUGETTE",
+    details: {
+      title: "FRANCIS VIVÉS & HUGETTE ZANELLA",
+      description:
+        "« Puisque vous voulez tout savoir, vous allez tout savoir. »\n" +
+        "Tous deux veufs, Huguette et Francis se sont rencontrés lorsqu’ils avaient respectivement 78 ans et " +
+        "79 ans lors d’un bal pour seniors. Tandis qu’elle se disait ne pas vouloir se remettre en couple et " +
+        "bien qu’elle se fit mise en garde du côté dragueur de Francis, ils se sont mis à se voir plus " +
+        "régulièrement depuis cette première rencontre. Ne voulant se remarier dû à la perte douloureuse de " +
+        "leurs conjoints respectifs alors qu’il était assez dragueur et romantique, ils se mirent en couple afin " +
+        "de pouvoir compter sur le support de l’un vers l’autre. Étant tous les deux des passionnés de " +
+        "voyages, ils voyagèrent à bord d’un paquebot lors de plusieurs croisières. Afin de toujours avoir des " +
+        "liens sociaux, ils font souvent des sorties dans des clubs de seniors pour s’amuser et jouer aux cartes " +
+        "avec des amis. À l’aube de leurs 93 et 95 ans, ils sont toujours propriétaires d’un pavillon acquis " +
+        "plusieurs années plus tôt et ont ainsi gardé une certaine indépendance malgré leurs grands âges.",
+      audio: audio3,
+    },
+  },
 ];
 
 export default function MO() {
@@ -20,12 +66,16 @@ export default function MO() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1); // Volume range: 0 to 1
   const [progress, setProgress] = useState(0); // Progress in percentage
-  const audioRef = useRef(null);
+  const audioRef = useRef(new Audio(slides[0].details.audio)); // Initialize with first slide's audio
 
-  // Update progress bar as audio plays
+  // Update audio source when slide changes
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    audio.src = slides[currentSlide].details.audio; // Update audio source
+    audio.load(); // Reload audio
+    audio.volume = volume;
+    setIsPlaying(false);
+    setProgress(0);
 
     const updateProgress = () => {
       const progressPercent = (audio.currentTime / audio.duration) * 100 || 0;
@@ -40,89 +90,83 @@ export default function MO() {
     return () => {
       audio.removeEventListener('timeupdate', updateProgress);
       audio.removeEventListener('ended', handleEnded);
+      audio.pause(); // Ensure audio stops on cleanup
     };
-  }, [currentSlide, detailedView]);
+  }, [currentSlide, volume]);
 
   const handleEnSavoirPlusClick = () => {
+    if (isTransitioning) return;
     setDetailedView(true);
-    setIsPlaying(false); // Reset audio state
-    setProgress(0); // Reset progress
+    setIsPlaying(false);
+    setProgress(0);
   };
 
   const handleBackClick = () => {
+    if (isTransitioning) return;
     setDetailedView(false);
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    }
+    audioRef.current.pause();
+    setIsPlaying(false);
   };
 
   const nextSlide = () => {
+    if (isTransitioning) return;
     setIsTransitioning(true);
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-      setProgress(0);
-    }
+    audioRef.current.pause();
+    setIsPlaying(false);
+    setProgress(0);
     setTimeout(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
       setIsTransitioning(false);
-    }, 500); // Match fade duration
+    }, 500);
   };
 
   const prevSlide = () => {
+    if (isTransitioning) return;
     setIsTransitioning(true);
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-      setProgress(0);
-    }
+    audioRef.current.pause();
+    setIsPlaying(false);
+    setProgress(0);
     setTimeout(() => {
       setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
       setIsTransitioning(false);
-    }, 500); // Match fade duration
+    }, 500);
   };
 
   const handleSlideChange = (index) => {
+    if (isTransitioning || currentSlide === index) return;
     setIsTransitioning(true);
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-      setProgress(0);
-    }
+    audioRef.current.pause();
+    setIsPlaying(false);
+    setProgress(0);
     setTimeout(() => {
       setCurrentSlide(index);
       setIsTransitioning(false);
       setDetailedView(false);
-    }, 500); // Match fade duration
+    }, 500);
   };
 
   const toggleAudio = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
+    const audio = audioRef.current;
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch((error) => console.error("Audio playback failed:", error));
     }
+    setIsPlaying(!isPlaying);
   };
 
   const handleVolumeChange = (e) => {
-    const newVolume = e.target.value;
+    const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
-    if (audioRef.current) {
-      audioRef.current.volume = newVolume;
-    }
+    audioRef.current.volume = newVolume;
   };
 
   const handleProgressChange = (e) => {
-    const newProgress = e.target.value;
+    const newProgress = parseFloat(e.target.value);
     setProgress(newProgress);
-    if (audioRef.current) {
-      const newTime = (newProgress / 100) * audioRef.current.duration;
-      audioRef.current.currentTime = newTime;
-    }
+    const audio = audioRef.current;
+    const newTime = (newProgress / 100) * audio.duration;
+    audio.currentTime = newTime || 0;
   };
 
   // Fade animation variants for slides
@@ -134,7 +178,6 @@ export default function MO() {
 
   return (
     <section className="h-screen flex items-center justify-center relative overflow-hidden bg-white">
-      
       <h1
         className="absolute top-6 text-3xl font-bold text-black z-10 uppercase"
         style={{ fontWeight: 400 }}
@@ -234,7 +277,7 @@ export default function MO() {
                 >
                   {slides[currentSlide].details.title}
                 </h1>
-                <p className="text-lg text-gray-200 mb-6 leading-relaxed font-light">
+                <p className="text-lg text-gray-200 mb-6 leading-relaxed font-light whitespace-pre-wrap">
                   {slides[currentSlide].details.description}
                 </p>
                 {/* Audio Player UI */}
@@ -246,7 +289,6 @@ export default function MO() {
                     >
                       {isPlaying ? 'Pause' : 'Play'}
                     </button>
-                    <audio ref={audioRef} src={slides[currentSlide].details.audio} />
                   </div>
                   {/* Timeline Bar */}
                   <div className="w-full">
@@ -283,13 +325,16 @@ export default function MO() {
                   onClick={handleBackClick}
                   className="px-6 py-2 text-white uppercase bg-white/20 hover:bg-white/40 rounded-full border border-white/50 transition-all duration-300 w-fit text-sm font-medium"
                 >
-                  Back
+                  Retour
                 </button>
               </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
+
+      {/* Audio Element (Hidden) */}
+      <audio ref={audioRef} />
 
       {/* CSS */}
       <style jsx>{`
@@ -298,7 +343,6 @@ export default function MO() {
           background-position: center;
           background-repeat: no-repeat;
         }
-        /* Custom range input styling */
         input[type='range']::-webkit-slider-thumb {
           -webkit-appearance: none;
           appearance: none;
