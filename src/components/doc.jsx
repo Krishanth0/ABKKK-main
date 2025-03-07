@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import PAINT from '../assets/PAINT.mp4'; // Imported MP4 file
+import PAINT from '../assets/PAINT.MP4'; // Imported MP4 file
 
 function VideoPage() {
   const videoRef = useRef(null);

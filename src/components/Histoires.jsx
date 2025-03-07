@@ -33,7 +33,18 @@ const slides = [
     text: "CHRISTIAN & MARIE-PAULE",
     details: {
       title: "Christian et Marie-Paule LAMY",
-      description: "This is the story of Christian and Marie-Paul.",
+      description:
+        "« Puisque vous voulez tout savoir, vous allez tout savoir. »\n" +
+        "Tous deux veufs, Huguette et Francis se sont rencontrés lorsqu’ils avaient respectivement 78 ans et " +
+        "79 ans lors d’un bal pour seniors. Tandis qu’elle se disait ne pas vouloir se remettre en couple et " +
+        "bien qu’elle se fit mise en garde du côté dragueur de Francis, ils se sont mis à se voir plus " +
+        "régulièrement depuis cette première rencontre. Ne voulant se remarier dû à la perte douloureuse de " +
+        "leurs conjoints respectifs alors qu’il était assez dragueur et romantique, ils se mirent en couple afin " +
+        "de pouvoir compter sur le support de l’un vers l’autre. Étant tous les deux des passionnés de " +
+        "voyages, ils voyagèrent à bord d’un paquebot lors de plusieurs croisières. Afin de toujours avoir des " +
+        "liens sociaux, ils font souvent des sorties dans des clubs de seniors pour s’amuser et jouer aux cartes " +
+        "avec des amis. À l’aube de leurs 93 et 95 ans, ils sont toujours propriétaires d’un pavillon acquis " +
+        "plusieurs années plus tôt et ont ainsi gardé une certaine indépendance malgré leurs grands âges.",
       audio: audio2,
     },
   },
@@ -66,13 +77,13 @@ export default function MO() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1); // Volume range: 0 to 1
   const [progress, setProgress] = useState(0); // Progress in percentage
-  const audioRef = useRef(new Audio(slides[0].details.audio)); // Initialize with first slide's audio
+  const audioRef = useRef(new Audio(slides[0].details.audio));
 
   // Update audio source when slide changes
   useEffect(() => {
     const audio = audioRef.current;
-    audio.src = slides[currentSlide].details.audio; // Update audio source
-    audio.load(); // Reload audio
+    audio.src = slides[currentSlide].details.audio;
+    audio.load();
     audio.volume = volume;
     setIsPlaying(false);
     setProgress(0);
@@ -90,7 +101,7 @@ export default function MO() {
     return () => {
       audio.removeEventListener('timeupdate', updateProgress);
       audio.removeEventListener('ended', handleEnded);
-      audio.pause(); // Ensure audio stops on cleanup
+      audio.pause();
     };
   }, [currentSlide, volume]);
 
@@ -169,6 +180,30 @@ export default function MO() {
     audio.currentTime = newTime || 0;
   };
 
+  // Parse description to highlight text within « » with slide-specific colors
+  const renderDescription = (description, slideIndex) => {
+    const parts = description.split(/(«[^»]*»)/g); // Split by « » while keeping the delimiters
+    const quoteColor = [
+      'text-red-500', // Michel & Odile - Red
+      'text-teal-500', // Christian & Marie-Paule - Teal (greenish-blue)
+      'text-purple-500', // Francis & Huguette - Purple
+    ][slideIndex];
+
+    return parts.map((part, index) => {
+      if (part.startsWith('«') && part.endsWith('»')) {
+        return (
+          <span
+            key={index}
+            className={`text-xl font-bold ${quoteColor} italic`}
+          >
+            {part}
+          </span>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
+
   // Fade animation variants for slides
   const fadeVariants = {
     initial: { opacity: 0 },
@@ -182,7 +217,7 @@ export default function MO() {
         className="absolute top-6 text-3xl font-bold text-black z-10 uppercase"
         style={{ fontWeight: 400 }}
       >
-        Les Séniors
+        Les Seniors
       </h1>
 
       {/* Slider Container */}
@@ -268,7 +303,7 @@ export default function MO() {
               exit="exit"
             >
               <motion.div
-                className="w-1/2 h-full flex flex-col justify-center p-12 bg-gradient-to-r from-black/80 to-transparent shadow-lg"
+                className="w-3/5 h-full flex flex-col justify-center p-16 bg-gradient-to-r from-black/80 to-transparent shadow-lg relative" // Added relative positioning
                 variants={fadeVariants}
               >
                 <h1
@@ -277,15 +312,16 @@ export default function MO() {
                 >
                   {slides[currentSlide].details.title}
                 </h1>
-                <p className="text-lg text-gray-200 mb-6 leading-relaxed font-light whitespace-pre-wrap">
-                  {slides[currentSlide].details.description}
+                <p className="text-lg text-gray-200 mb-8 leading-relaxed font-light whitespace-pre-wrap">
+                  {renderDescription(slides[currentSlide].details.description, currentSlide)}
                 </p>
                 {/* Audio Player UI */}
-                <div className="space-y-4 mb-6">
-                  <div className="flex items-center space-x-4">
+                <div className="space-y-3 mb-6"> {/* Reduced space-y-6 to space-y-3 */}
+                  <h3 className="text-lg font-serif text-white font-medium">Extrait de l'entretien :</h3> {/* Changed to font-serif */}
+                  <div className="flex items-center space-x-3"> {/* Reduced space-x-4 to space-x-3 */}
                     <button
                       onClick={toggleAudio}
-                      className="px-4 py-2 text-white uppercase bg-white/20 hover:bg-white/40 rounded-full border border-white/50 transition-all duration-300 text-sm font-medium"
+                      className="px-3 py-1 text-white uppercase bg-white/20 hover:bg-white/40 rounded-full border border-white/50 transition-all duration-300 text-xs font-medium" // Reduced size
                     >
                       {isPlaying ? 'Pause' : 'Play'}
                     </button>
@@ -298,7 +334,7 @@ export default function MO() {
                       max="100"
                       value={progress}
                       onChange={handleProgressChange}
-                      className="w-full h-2 bg-gray-300 rounded-full appearance-none cursor-pointer"
+                      className="w-full h-1 bg-gray-300 rounded-full appearance-none cursor-pointer" // Reduced height to h-1
                       style={{
                         background: `linear-gradient(to right, #fff ${progress}%, #888 ${progress}%)`,
                       }}
@@ -306,7 +342,7 @@ export default function MO() {
                   </div>
                   {/* Volume Slider */}
                   <div className="flex items-center space-x-2">
-                    <span className="text-white text-sm">Volume:</span>
+                    <span className="text-white text-xs">Volume:</span> {/* Reduced text-sm to text-xs */}
                     <input
                       type="range"
                       min="0"
@@ -314,7 +350,7 @@ export default function MO() {
                       step="0.01"
                       value={volume}
                       onChange={handleVolumeChange}
-                      className="w-24 h-2 bg-gray-300 rounded-full appearance-none cursor-pointer"
+                      className="w-20 h-1 bg-gray-300 rounded-full appearance-none cursor-pointer" // Reduced w-24 to w-20 and h-2 to h-1
                       style={{
                         background: `linear-gradient(to right, #fff ${volume * 100}%, #888 ${volume * 100}%)`,
                       }}
@@ -323,7 +359,7 @@ export default function MO() {
                 </div>
                 <button
                   onClick={handleBackClick}
-                  className="px-6 py-2 text-white uppercase bg-white/20 hover:bg-white/40 rounded-full border border-white/50 transition-all duration-300 w-fit text-sm font-medium"
+                  className="absolute bottom-4 right-4 px-4 py-1 text-white uppercase bg-white/20 hover:bg-white/40 rounded-full border border-white/50 transition-all duration-300 text-xs font-medium" // Positioned bottom-right, reduced size
                 >
                   Retour
                 </button>
@@ -346,16 +382,16 @@ export default function MO() {
         input[type='range']::-webkit-slider-thumb {
           -webkit-appearance: none;
           appearance: none;
-          width: 12px;
-          height: 12px;
+          width: 10px; /* Reduced from 12px */
+          height: 10px; /* Reduced from 12px */
           background: #fff;
           border-radius: 50%;
           cursor: pointer;
           border: 1px solid #ccc;
         }
         input[type='range']::-moz-range-thumb {
-          width: 12px;
-          height: 12px;
+          width: 10px; /* Reduced from 12px */
+          height: 10px; /* Reduced from 12px */
           background: #fff;
           border-radius: 50%;
           cursor: pointer;
